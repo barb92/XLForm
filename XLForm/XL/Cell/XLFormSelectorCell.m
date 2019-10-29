@@ -144,6 +144,11 @@
     self.selectionStyle = self.rowDescriptor.isDisabled || [self.rowDescriptor.rowType isEqualToString:XLFormRowDescriptorTypeInfo] ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
     self.textLabel.text = [NSString stringWithFormat:@"%@%@", self.rowDescriptor.title, self.rowDescriptor.required && self.rowDescriptor.sectionDescriptor.formDescriptor.addAsteriskToRequiredRowsTitle ? @"*" : @""];
     self.detailTextLabel.text = [self valueDisplayText];
+    
+    if (_pickerView) {
+        [_pickerView selectRow:[self selectedIndex] inComponent:0 animated:NO];
+        [_pickerView reloadAllComponents];
+    }
 }
 
 -(void)formDescriptorCellDidSelectedWithFormController:(XLFormViewController *)controller
@@ -456,7 +461,7 @@
 {
     if (self.rowDescriptor.value){
         for (id option in self.rowDescriptor.selectorOptions){
-            if ([[option valueData] isEqual:[self.rowDescriptor.value valueData]]){
+            if ([[option valueData] isEqual:[self.rowDescriptor.value valueData]] || [[option displayText] isEqual:[self.rowDescriptor.value valueData]]){
                 return [self.rowDescriptor.selectorOptions indexOfObject:option];
             }
         }
